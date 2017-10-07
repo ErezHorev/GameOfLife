@@ -7,19 +7,13 @@
 
 <body>
     <!-- TODO: make size configureable and/or auto-adjustable by window size -->
-    <canvas id="board" width="500" height="500" style="border:2px solid #000000;">
-    </canvas>
+    <canvas id="board" width="500" height="500" style="border:2px solid black;"></canvas>
     <script type="text/javascript" src="./app.js"></script>
     <script type="text/javascript">
-        var mygame = new game(initCanvas())
-        mygame.start()
-        function initCanvas() {
-            console.log("initCanvas")
-            var canvas = document.getElementById('board').getContext('2d')
-            canvas.strokeStyle = 'lightgray';
-            canvas.fillStyle = 'black';
-            return canvas
-        }
+        var gameoflife = new game(getCanvas())
+        gameoflife.start()
+
+        function getCanvas() { return document.getElementById('board') }
     </script>
 </body>
 
