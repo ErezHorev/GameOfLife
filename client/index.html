@@ -10,58 +10,58 @@
     <style>
         h1 {
             color: black;
-            font-family: fantasy;
+            font-family: Times New Roman;
             font-size: 200%;
+            position: relative;
+            left: 180px;
         }
     </style>
-    <title>GameOfLife</title>
     <h1>Conway's Game Of Life</h1>
+    <title>Conway's Game Of Life</title>
 </head>
 <!--
 TODO
     1. start - Done
-    2. reset - Done
+    2. change reset button to 'stop'
+    3. add another reset button to reset the line and rows to default values
     3. allow manual paint on grid
     4. add init states: random + more patterns
     5. add basic error handling - in case of a crash, restart the app
-
-    bugs:
-    1. can press twice on start - while fixing change start button to pause/stop
 -->
 
 <body>
-    <div>
-        <button type="button" id="startBtn">Start</button>
+    <div style="position: absolute; top: 100; left: 100px;">
+        <div>
+            <button type="button" id="startBtn">Start</button>
+        </div>
     </div>
-    <div>
-        <button type="button" id="stopBtn">Reset</button>
+    <div style="position: relative; top: 50px; left: 100px;">
+        <canvas id="myCanvas" ;></canvas>
     </div>
-    <div>
-        Lines:
-        <input type="text" id="lines" value="70">
-    </div>
-    <div>
-        Rows:
-        <input type="text" id="rows" value="70">
-    </div>
-
-    <canvas id="board" width="512" height="512" style="border:1px solid grey;"></canvas>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="./app.js"></script>
     <script type="text/javascript">
-        var gameoflife = new game(getCanvas())
+        var gameCanvas = setupCanvas(defaults.rows, defaults.lines);
+        var gameoflife = new Game(gameCanvas, defaults.rows, defaults.lines);
 
         $('#startBtn').click(function () {
-            var rows = document.getElementById('rows').value
-            var lines = document.getElementById('lines').value
-            gameoflife.setupGrid(rows, lines)
-            gameoflife.start()
+            if (gameoflife.running) {
+                gameoflife.resetGame();
+                $('#startBtn').text("Start");
+                return
+            };
+            gameoflife.start();
+            $('#startBtn').text("Stop");
         });
-        $('#stopBtn').click(function () {
-            gameoflife.reset()
-         });
-
-        function getCanvas() { return document.getElementById('board') }
+        $('#pauseBtn').click(function () {
+            if ($('#pauseBtn').text() == "Continue") {
+                gameoflife.tick();
+                $('#pauseBtn').text("Pause");
+            } else {
+                gameoflife.pause();
+                $('#pauseBtn').text("Continue");
+            };
+        });
     </script>
 </body>
 
