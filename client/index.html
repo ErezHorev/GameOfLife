@@ -1,17 +1,65 @@
 <!DOCTYPE html>
 <html>
+<style>
+    body {
+        background-color: rgb(207, 227, 230);
+    }
+</style>
 
 <head>
-    <!-- TODO: add title -->
+    <style>
+        h1 {
+            color: black;
+            font-family: fantasy;
+            font-size: 200%;
+        }
+    </style>
+    <title>GameOfLife</title>
+    <h1>Conway's Game Of Life</h1>
 </head>
+<!--
+TODO
+    1. start - Done
+    2. reset - Done
+    3. allow manual paint on grid
+    4. add init states: random + more patterns
+    5. add basic error handling - in case of a crash, restart the app
+
+    bugs:
+    1. can press twice on start - while fixing change start button to pause/stop
+-->
 
 <body>
-    <!-- TODO: make size configureable and/or auto-adjustable by window size -->
-    <canvas id="board" width="500" height="500" style="border:2px solid black;"></canvas>
+    <div>
+        <button type="button" id="startBtn">Start</button>
+    </div>
+    <div>
+        <button type="button" id="stopBtn">Reset</button>
+    </div>
+    <div>
+        Lines:
+        <input type="text" id="lines" value="70">
+    </div>
+    <div>
+        Rows:
+        <input type="text" id="rows" value="70">
+    </div>
+
+    <canvas id="board" width="512" height="512" style="border:1px solid grey;"></canvas>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="./app.js"></script>
     <script type="text/javascript">
         var gameoflife = new game(getCanvas())
-        gameoflife.start()
+
+        $('#startBtn').click(function () {
+            var rows = document.getElementById('rows').value
+            var lines = document.getElementById('lines').value
+            gameoflife.setupGrid(rows, lines)
+            gameoflife.start()
+        });
+        $('#stopBtn').click(function () {
+            gameoflife.reset()
+         });
 
         function getCanvas() { return document.getElementById('board') }
     </script>

@@ -1,69 +1,101 @@
 "use strict";
 
+/**
+ * game constructor
+ * @param {*} canvas
+ */
 function game(canvas) {
     console.log("creating new game");
-    this.canvas = setupCanvas(canvas);
-    this.grid = [];
+    this.canvas = setCanvasCtx(canvas);
+    this.grid = []
+    this._intervalID;
 
+    // methods
     this.start = start;
+    this.reset = reset;
+    this.setupGrid = setupGrid
     this.tick = tick;
     this.update = update;
 }
 
-function setupCanvas(canvas) {
+/**
+ * 'setCanvasCtx' setups the canvas context and binds it to the canvas object
+ * @param {*} canvas
+ */
+function setCanvasCtx(canvas) {
     canvas.ctx = canvas.getContext('2d')
     canvas.ctx.strokeStyle = 'lightgray';
     canvas.ctx.fillStyle = 'black';
     return canvas
 }
 
-function start() {
-    var rows = 100;
-    var lines = 100;
-    this.grid = initCells(rows, lines);
-    this.tick();
+function setupGrid(rows, lines) {
+    this.grid = new grid(rows, lines);
 }
 
-function initCells(rows, lines) {
-    console.log("Initializing cells on:", rows, "rows", "and", lines, "lines")
-
-    var grid = [[]];
-    for (var row = 0; row < rows; row++) {
-        grid[row] = [];
-        for (var line = 0; line < lines; line++) {
-            grid[row][line] = 0;
-        };
-    };
-
-    // set initial state
-    // TODO: parameterize initial pattern and add more patterns
-    gosperGliderGun().forEach(function (coordinates) {
-        var x = coordinates[0], y = coordinates[1];
-        grid[x][y] = 1;
-    });
-
-    return grid
+function start() {
+    this.tick();
+}
+function reset() {
+    clearInterval(this._intervalID)
+    this.grid = initGrid(this.grid.length, this.grid[0].length)
+    draw(this.canvas, this.grid)
 }
 
 function tick() {
-    var interval = 50; //TODO: parameterize for user control
-    var canvas = this.canvas;
-    var grid = this.grid;
+    var interval = 20, //TODO: maybe parameterize for user control
+        canvas = this.canvas,
+        grid = this.grid;
 
     var drawAndUpdate = function () {
         draw(canvas, grid)
         grid = update(grid)
     };
 
-    setInterval(drawAndUpdate, interval);
+    this._intervalID = setInterval(drawAndUpdate, interval);
 }
 
+/**
+ * grid constructor
+ * @param {*} rows
+ * @param {*} lines
+ */
+function grid(rows, lines) {
+    console.log("Initializing cells on:", rows, "rows", "and", lines, "lines")
+    var grid = initGrid(rows, lines)
+
+    // set initial state
+    // TODO: parameterize initial pattern and add more patterns
+    gosperGliderGun().forEach(function (coordinates) {
+        var x = coordinates[0], y = coordinates[1];
+        if (grid[x] != undefined && grid[x][y] != undefined) {
+            grid[x][y] = 1;
+        };
+    });
+
+    return grid
+}
+
+function initGrid(rows, lines) {
+    var grid = [[]]
+    for (var row = 0; row < rows; row++) {
+        grid[row] = [];
+        for (var line = 0; line < lines; line++) {
+            grid[row][line] = 0;
+        };
+    };
+    return grid
+}
+/**
+ * 'draw' is drawing the current grid values on given canvas.
+ * @param {*} canvas
+ * @param {*} grid
+ */
 function draw(canvas, grid) {
     console.log("Drawing on canvas...");
+    var cellSize = 8;
+    canvas.ctx.clearRect(0, 0, 1512, 1512);
 
-    var cellSize = 10;
-    canvas.ctx.clearRect(0, 0, 1512, 512);
-    // TODO: consider transforming this to some 'walk' method on cells (maybe rename 'cells' to 'grid'/'world'/'board'?)
     grid.forEach(function (row, x) {
         row.forEach(function (cell, y) {
             canvas.ctx.beginPath();
@@ -78,19 +110,17 @@ function draw(canvas, grid) {
     console.log("Done drawing on canvas...");
 }
 
+/**
+'update' will return an updated game board(grid)
+see game rules at https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Rules
+ */
 function update(grid) {
     console.log("Updating cells...");
     var newGrid = [];
 
     grid.forEach(function (row, x) {
         newGrid[x] = [];
-
         row.forEach(function (cellValue, y) {
-            // game rules:
-            // Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
-            // Any live cell with two or three live neighbours lives on to the next generation.
-            // Any live cell with more than three live neighbours dies, as if by overpopulation.
-            // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
             var alive = 0;
             switch (findNeighbours(x, y, grid)) {
                 case 2:
@@ -105,33 +135,44 @@ function update(grid) {
     return newGrid
 }
 
+/**
+ * 'findNeighbours' returns the amount of nearby members
+ * of the target cell at [x,y] point on grid.
+ * @param {*} x
+ * @param {*} y
+ * @param {*} grid
+ */
 function findNeighbours(x, y, grid) {
     var up = y - 1,
         down = y + 1,
         right = x + 1,
         left = x - 1;
 
-    function knockKnock(x, y) {
+    function knocKnock(x, y) {
         return grid[x] && grid[x][y];
     }
-    // looking for close neighbours
+
     var neighboursCount = 0;
     // upper line
-    neighboursCount += knockKnock(x, up) ? 1 : 0;
-    neighboursCount += knockKnock(left, up) ? 1 : 0;
-    neighboursCount += knockKnock(right, up) ? 1 : 0;
+    neighboursCount += knocKnock(x, up) ? 1 : 0;
+    neighboursCount += knocKnock(left, up) ? 1 : 0;
+    neighboursCount += knocKnock(right, up) ? 1 : 0;
     // current line
-    neighboursCount += knockKnock(left, y) ? 1 : 0;
-    neighboursCount += knockKnock(right, y) ? 1 : 0;
+    neighboursCount += knocKnock(left, y) ? 1 : 0;
+    neighboursCount += knocKnock(right, y) ? 1 : 0;
     // lower line
-    neighboursCount += knockKnock(x, down) ? 1 : 0;
-    neighboursCount += knockKnock(left, down) ? 1 : 0;
-    neighboursCount += knockKnock(right, down) ? 1 : 0;
+    neighboursCount += knocKnock(x, down) ? 1 : 0;
+    neighboursCount += knocKnock(left, down) ? 1 : 0;
+    neighboursCount += knocKnock(right, down) ? 1 : 0;
 
     return neighboursCount
 }
 
-// patterns
+//// PATTERNS ////
+
+/**
+ * Gosper's Glider Gun pattern
+ */
 function gosperGliderGun() {
     return [
         [1, 5], [1, 6], [2, 5], [2, 6], [11, 5], [11, 6], [11, 7], [12, 4],
