@@ -76,15 +76,13 @@ const cellSize = 8;
  * @param {*} height
  */
 function setupCanvas(width, height) {
-    var canvas = document.getElementById('myCanvas')
-    canvas.style.border = '3px solid grey';
+    var canvas = document.getElementById('gameCanvas')
     canvas.height = height * cellSize;
     canvas.width = width * cellSize;
 
     canvas.ctx = canvas.getContext('2d');
     canvas.ctx.strokeStyle = 'lightgray';
     canvas.ctx.fillStyle = 'black';
-    canvas.ctx.borderColor = 'black';
     return canvas;
 }
 
