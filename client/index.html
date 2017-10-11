@@ -1,68 +1,78 @@
 <!DOCTYPE html>
 <html>
-<style>
-    body {
-        background-color: rgb(207, 227, 230);
-    }
-</style>
-
-<head>
+<meta name="viewport" content="width=device-width, initial-scale=0.6">
+<div style="height: 800px; margin: 1%; ">
     <style>
-        h1 {
-            color: black;
-            font-family: Times New Roman;
-            font-size: 200%;
-            position: relative;
-            left: 180px;
+        body {
+            background-color: rgb(232, 232, 232);
         }
     </style>
-    <h1>Conway's Game Of Life</h1>
-    <title>Conway's Game Of Life</title>
-</head>
-<!--
-TODO
-    1. start - Done
-    2. change reset button to 'stop'
-    3. add another reset button to reset the line and rows to default values
-    3. allow manual paint on grid
-    4. add init states: random + more patterns
-    5. add basic error handling - in case of a crash, restart the app
--->
 
-<body>
-    <div style="position: absolute; top: 100; left: 100px;">
-        <div>
-            <button type="button" id="startBtn">Start</button>
+    <head>
+        <style>
+            h1 {
+                color: black;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                font-size: 300%;
+                font-style: italic;
+                position: relative;
+                left: 5%;
+            }
+        </style>
+        <h1>Conway's Game Of Life</h1>
+        <title>Conway's Game Of Life</title>
+    </head>
+
+    <body>
+        <div style="position: relative;">
+            <style>
+                button {
+                    color: black;
+                    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                    font-size: 200%;
+                    position: relative;
+                    left: 5%;
+                    top: 20px;
+                }
+                canvas {
+                    position: relative;
+                    left: 5%;
+                    top: 50px;
+                }
+            </style>
+            <div>
+                <button type="button" id="startBtn">Start</button>
+            </div>
+            <div>
+                <canvas id="myCanvas"></canvas>
+            </div>
         </div>
-    </div>
-    <div style="position: relative; top: 50px; left: 100px;">
-        <canvas id="myCanvas" ;></canvas>
-    </div>
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <script type="text/javascript" src="./app.js"></script>
-    <script type="text/javascript">
-        var gameCanvas = setupCanvas(defaults.rows, defaults.lines);
-        var gameoflife = new Game(gameCanvas, defaults.rows, defaults.lines);
+</div>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="./app.js"></script>
+<script type="text/javascript">
+    var gameCanvas = setupCanvas(defaults.rows, defaults.lines);
+    var gameoflife = new Game(gameCanvas, defaults.rows, defaults.lines);
 
-        $('#startBtn').click(function () {
-            if (gameoflife.running) {
-                gameoflife.resetGame();
-                $('#startBtn').text("Start");
-                return
-            };
-            gameoflife.start();
-            $('#startBtn').text("Stop");
-        });
-        $('#pauseBtn').click(function () {
-            if ($('#pauseBtn').text() == "Continue") {
-                gameoflife.tick();
-                $('#pauseBtn').text("Pause");
-            } else {
-                gameoflife.pause();
-                $('#pauseBtn').text("Continue");
-            };
-        });
-    </script>
+    $('#startBtn').click(function () {
+        if (gameoflife.running) {
+            gameoflife.resetGame();
+            $('#startBtn').text("Start");
+            return
+        };
+        gameoflife.start();
+        $('#startBtn').text("Stop");
+    });
+    $('#pauseBtn').click(function () {
+        if ($('#pauseBtn').text() == "Continue") {
+            gameoflife.tick();
+            $('#pauseBtn').text("Pause");
+        } else {
+            gameoflife.pause();
+            $('#pauseBtn').text("Continue");
+        };
+    });
+</script>
 </body>
 
 </html>
