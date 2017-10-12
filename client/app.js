@@ -16,6 +16,7 @@ function Game(canvas, rows, lines) {
     var newGame = {
         canvas: canvas,
         grid: [],
+        _pattern: [],
         rows: rows,
         lines: lines,
         running: 0,
@@ -26,14 +27,15 @@ function Game(canvas, rows, lines) {
         pause: pause,
         update: update,
         resetGame: resetGame,
-        setupGrid: setupGrid
+        setupGrid: setupGrid,
+        setPattern: setPattern
     };
     newGame.init();
     return newGame;
 }
 
 function init() {
-    this.setupGrid(this.rows, this.lines, gosperGliderGunPattern());
+    this.setupGrid(this.rows, this.lines, this._pattern);
     draw(this.canvas, this.grid);
 }
 
@@ -66,6 +68,10 @@ function tick() {
     };
 
     this.running = setInterval(drawAndUpdate, interval);
+}
+
+function setPattern(pattern) {
+    this._pattern = pattern;
 }
 
 const cellSize = 8;
@@ -121,15 +127,15 @@ function Grid(rows, lines, pattern) {
             grid[row][line] = 0;
         };
     };
-    return setPattern(grid, pattern);
+    return populateGrid(grid, pattern);
 }
 
 /**
- * 'setPattern' sets the given pattern(coordinates) on given grid.
+ * 'populateGrid' sets the given pattern(coordinates) on given grid.
  * @param {*} grid
  * @param {*} pattern
  */
-function setPattern(grid, pattern) {
+function populateGrid(grid, pattern) {
     pattern.forEach(function (coordinates) {
         var x = coordinates[0], y = coordinates[1];
         if (grid[x] === undefined || grid[x][y] === undefined) {
@@ -233,9 +239,23 @@ function findNeighbours(x, y, grid) {
 function assert(condition, message) { if (!condition) { throw message; }; }
 function log(msg) { if (debug) { console.log(debug) }; }
 
+
 //// GAME PATTERNS ////
+function allPatterns() {
+    return {
+        'clear': { name: "Clear", get: emptyPattern },
+        'random': { name: "Random", get: randomPattern },
+        'gliderGun': { name: "Gosper Glider Gun Pattern", get: gosperGliderGunPattern }
+    };
+}
 /**
-* Random cells
+* Clear grid pattern
+*/
+function emptyPattern() {
+    return Array.from(Array(defaults.lines).fill(0));
+}
+/**
+* Random cells pattern
 */
 function randomPattern() {
     function rand() { return Math.floor(Math.random() * defaults.lines); }
@@ -247,7 +267,7 @@ function randomPattern() {
 }
 
 /**
- * Gosper's Glider Gun
+ * Gosper's Glider Gun pattern
  */
 function gosperGliderGunPattern() {
     return [

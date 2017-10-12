@@ -5,6 +5,16 @@ body {
     background-color: rgba(255, 255, 255, 0.699);
 }
 
+canvas {
+    position: relative;
+    border: 3px solid silver;
+    background-color: white;
+    background-repeat: repeat;
+
+    top: 50px;
+    left: 3%;
+}
+
 button {
     background-color: whitesmoke;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -17,6 +27,11 @@ button {
     box-shadow: 0 8px 16px 0 grey, 0 6px 20px 0 lightgray;
 }
 
+select {
+    position: relative;
+    font-size: 150%;
+    left: 5%;
+}
 /* by element class */
 .title {
     color: black;
@@ -26,54 +41,10 @@ button {
     position: relative;
 }
 
-.gameCanvas {
-    position: relative;
-    border: 3px solid silver;
-    background-color: white;
-    background-repeat: repeat;
-
-    top: 50px;
-}
-
 /* Start Button */
 .startBtn {
     background:white;
 }
 .startBtn.highlight {
     background:rgb(250, 219, 219);
-}
-
-/* Dropdown Button */
-.patternsBtn {
-    left: 4%;
-}
-
-/* Dropdown Content (Hidden by Default) */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    max-width: 30%;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    left: 53%;
-}
-
-/* Links inside the dropdown */
-.dropdown-content a {
-    color: black;
-    padding: 8px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {
-    background-color: #f8ff91;
-}
-
-/* Show the dropdown menu (use JS to add this class to the .dropdown-content container
- when the user clicks on the dropdown button) */
-.show {
-    display: block;
 }
