@@ -1,6 +1,6 @@
 /* General */
 body {
-    background-image: url('./assets/GOL-background.jpg');
+    background-image: url('./GOL-background.jpg');
     background-blend-mode: lighten;
     background-color: rgba(255, 255, 255, 0.699);
 }

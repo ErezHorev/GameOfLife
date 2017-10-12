@@ -2,10 +2,10 @@ var http = require('http');
 var express = require("express");
 var app = express();
 
-app.use(express.static(__dirname + '/client'));
+app.use(express.static(__dirname));
 
 app.get('/',function(req,res){
-    res.sendFile(path.join(__dirname+'/client/index.html'));
+    res.sendFile('index.html');
   });
 
 app.listen(8080);
