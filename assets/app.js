@@ -25,7 +25,6 @@ function Game(canvas, rows, lines) {
         tick: tick,
         start: start,
         pause: pause,
-        update: update,
         resetGame: resetGame,
         setupGrid: setupGrid,
         setPattern: setPattern
@@ -58,38 +57,20 @@ function start() {
 }
 
 function tick() {
-    var interval = 40, //TODO: parameterize for user to control speed
+    var interval = 40, //TODO: parameterize for user to throttle speed
         canvas = this.canvas,
         grid = this.grid;
 
-    var drawAndUpdate = function () {
+    var runStep = function () {
         draw(canvas, grid);
-        grid = update(grid);
+        grid = nextStep(grid);
     };
 
-    this.running = setInterval(drawAndUpdate, interval);
+    this.running = setInterval(runStep, interval);
 }
 
 function setPattern(pattern) {
     this._pattern = pattern;
-}
-
-const cellSize = 8;
-/**
- * 'setupCanvas' setups the canvas context and binds it to
- * the canvas object.
- * @param {*} width
- * @param {*} height
- */
-function setupCanvas(width, height) {
-    var canvas = document.getElementById('gameCanvas')
-    canvas.height = height * cellSize;
-    canvas.width = width * cellSize;
-
-    canvas.ctx = canvas.getContext('2d');
-    canvas.ctx.strokeStyle = 'lightgray';
-    canvas.ctx.fillStyle = 'black';
-    return canvas;
 }
 
 function setupGrid(rows, lines, pattern) {
@@ -146,6 +127,24 @@ function populateGrid(grid, pattern) {
     return grid;
 }
 
+const cellSize = 8;
+/**
+ * 'setupCanvas' setups the canvas context and binds it to
+ * the canvas object.
+ * @param {*} width
+ * @param {*} height
+ */
+function setupCanvas(width, height) {
+    var canvas = document.getElementById('gameCanvas')
+    canvas.height = height * cellSize;
+    canvas.width = width * cellSize;
+
+    canvas.ctx = canvas.getContext('2d');
+    canvas.ctx.strokeStyle = 'lightgray';
+    canvas.ctx.fillStyle = 'black';
+    return canvas;
+}
+
 /**
  * 'draw' is drawing the current grid values on given canvas.
  * @param {*} canvas
@@ -170,13 +169,13 @@ function draw(canvas, grid) {
 }
 
 /**
- * 'update' will return an updated grid(game board) after one step according
+ * 'nextStep' will return an updated grid(game board) after one step according
  * to the game's rules. see game rules at https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Rules.
  *
  * @param {*} grid
  */
-function update(grid) {
-    log("Updating cells...");
+function nextStep(grid) {
+    log("Running next step on grid...");
     var newGrid = [];
 
     grid.forEach(function (row, x) {
@@ -211,10 +210,10 @@ function findNeighbours(x, y, grid) {
         left = x - 1;
 
     function knocKnock(x, y) {
-        // We can't really make an infinite world(grid) but we can loop our arrays
-        // on grid (Note: its destructing Gosper's glider gun after few moments).
+        // We can't really make an infinite world(grid) but we can loop our arrays on grid
+        // (Note: its destructing Gosper's glider gun after few moments).
         // enable the next 2 lines to create the loop effect:
-        // if (x < 0) { x += defaults.lines };
+        // if (x < 0) { x += defaults.rows };
         // if (y < 0) { y += defaults.lines };
         return grid[x] && grid[x][y];
     }
