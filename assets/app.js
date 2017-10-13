@@ -11,7 +11,7 @@ const defaults = {
  * game constructor
  * @param {*} canvas
  */
-function Game(canvas, rows, lines) {
+function GameOfLife(canvas, rows, lines) {
     console.log("creating new game");
     var newGame = {
         canvas: canvas,
@@ -19,15 +19,16 @@ function Game(canvas, rows, lines) {
         _pattern: [],
         rows: rows,
         lines: lines,
-        running: 0,
+        isRunning: 0,
         // methods
         init: init,
         tick: tick,
         start: start,
         pause: pause,
-        resetGame: resetGame,
+        stop: stop,
+        drawCell: drawCell,
         setupGrid: setupGrid,
-        setPattern: setPattern
+        setPattern: setPattern,
     };
     newGame.init();
     return newGame;
@@ -39,18 +40,18 @@ function init() {
 }
 
 function pause() {
-    clearInterval(this.running);
-    this.running = 0;
+    clearInterval(this.isRunning);
+    this.isRunning = 0;
 }
 
-function resetGame() {
+function stop() {
     console.log("Stopping game ...");
     this.pause();
     this.init();
 }
 
 function start() {
-    if (!this.running) {
+    if (!this.isRunning) {
         console.log("Running game ...")
         this.tick();
     };
@@ -66,8 +67,18 @@ function tick() {
         grid = nextStep(grid);
     };
 
-    this.running = setInterval(runStep, interval);
+    this.isRunning = setInterval(runStep, interval);
 }
+
+function drawCell(x, y) {
+    x = Math.floor(x / cellSize);
+    y = Math.floor(y / cellSize);
+    if (x < 0 || y < 0) {
+        return // out of the canvas boundaries, do nothing
+    }
+    this.grid[x][y] = 1
+    draw(this.canvas, this.grid)
+};
 
 function setPattern(pattern) {
     this._pattern = pattern;
@@ -210,7 +221,8 @@ function findNeighbours(x, y, grid) {
         left = x - 1;
 
     function knocKnock(x, y) {
-        // We can't really make an infinite world(grid) but we can loop our arrays on grid
+        // We can't really make an infinite world(grid) but we can loop our
+        // arrays on grid by checking for neighbours on both ends of the grid.
         // (Note: its destructing Gosper's glider gun after few moments).
         // enable the next 2 lines to create the loop effect:
         // if (x < 0) { x += defaults.rows };
