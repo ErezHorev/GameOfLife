@@ -4,17 +4,18 @@ var debug = false; // in case 'true', adds logs to console
 
 const defaults = {
     rows: 70,
-    lines: 70
+    lines: 70,
+    pattern: 'gameoflife'
 };
 
 /**
  * game constructor
  * @param {*} canvas
  */
-function GameOfLife(canvas, rows, lines) {
+function GameOfLife(rows, lines, pattern) {
     console.log("creating new game");
     var newGame = {
-        canvas: canvas,
+        canvas: setupCanvas(rows, lines),
         grid: [],
         _pattern: [],
         rows: rows,
@@ -30,6 +31,7 @@ function GameOfLife(canvas, rows, lines) {
         setupGrid: setupGrid,
         setPattern: setPattern,
     };
+    newGame.setPattern(allPatterns()[pattern]);
     newGame.init();
     return newGame;
 }
@@ -81,7 +83,7 @@ function drawCell(x, y) {
 };
 
 function setPattern(pattern) {
-    this._pattern = pattern;
+    this._pattern = pattern.get();
 }
 
 function setupGrid(rows, lines, pattern) {

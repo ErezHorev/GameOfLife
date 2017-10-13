@@ -20,7 +20,6 @@ canvas {
     background-repeat: repeat;
 
     top: 50px;
-    left: 3%;
 }
 
 button {
@@ -38,10 +37,17 @@ button {
 }
 
 select {
+    background-color: whitesmoke;
     position: relative;
     font-size: 150%;
     left: 5%;
     box-shadow: 0 8px 16px 0 grey, 0 6px 20px 0 lightgray;
+}
+
+label {
+    font-size: 150%;
+    position: relative;
+    left: 5%;
 }
 
 /* Start Button */
