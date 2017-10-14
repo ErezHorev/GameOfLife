@@ -25,31 +25,20 @@ function GameOfLife(rows, lines, pattern) {
         init: init,
         tick: tick,
         start: start,
-        pause: pause,
         stop: stop,
+        playIntro: playIntro,
         drawCell: drawCell,
         setupGrid: setupGrid,
         setPattern: setPattern,
     };
-    newGame.setPattern(allPatterns()[pattern]);
     newGame.init();
+    newGame.setPattern(allPatterns[pattern]);
     return newGame;
 }
 
 function init() {
-    this.setupGrid(this.rows, this.lines, this._pattern);
+    this.grid = setupGrid(this.rows, this.lines, this._pattern);
     draw(this.canvas, this.grid);
-}
-
-function pause() {
-    clearInterval(this.isRunning);
-    this.isRunning = 0;
-}
-
-function stop() {
-    console.log("Stopping game ...");
-    this.pause();
-    this.init();
 }
 
 function start() {
@@ -57,6 +46,13 @@ function start() {
         console.log("Running game ...")
         this.tick();
     };
+}
+
+function stop() {
+    console.log("Stopping game ...");
+    clearInterval(this.isRunning);
+    this.isRunning = 0;
+    this.init();
 }
 
 function tick() {
@@ -72,11 +68,47 @@ function tick() {
     this.isRunning = setInterval(runStep, interval);
 }
 
+function playIntro() {
+    var pattern = allPatterns['gameoflife'].get();
+    pattern.sort(() => Math.random() * 2 - 1); //randomizing pattern
+
+    var interval = 100,
+        canvas = this.canvas,
+        grid = this.grid,
+        runId = 0;
+
+    var runStep = function () {
+        var slice = [],
+            done = false;
+
+        for (var i = 0; i < 20; i++) {
+            let cell = pattern.pop();
+            if (cell == undefined) {
+                clearInterval(runId);
+                break;
+            };
+            slice.push(cell);
+        }
+
+        populateGrid(grid, slice);
+        draw(canvas, grid);
+    };
+
+    runId = setInterval(runStep, interval);
+    fadeInButtons();
+}
+
+/**
+ * 'drawCell' draws a single cell on game's grid.
+ * Used for manual paint on grid by user.
+ * @param {*} x 
+ * @param {*} y 
+ */
 function drawCell(x, y) {
     x = Math.floor(x / cellSize);
     y = Math.floor(y / cellSize);
     if (x < 0 || y < 0) {
-        return // out of the canvas boundaries, do nothing
+        return // noop - out of canvas boundaries
     }
     this.grid[x][y] = 1
     draw(this.canvas, this.grid)
@@ -86,9 +118,16 @@ function setPattern(pattern) {
     this._pattern = pattern.get();
 }
 
+
+/**
+ * 'setupGrid' returns new grid, setup with given rows and lines
+ * and initialized with given pattern.
+ * @param {*} rows 
+ * @param {*} lines 
+ * @param {*} pattern 
+ */
 function setupGrid(rows, lines, pattern) {
-    try {
-        // protect grid initialization
+    try { // protect grid initialization
         assert((rows > 0 && lines > 0), `rows/lines must be larger than 0` +
             `(will start with defaults: rows=${defaults.rows}, lines=${defaults.lines})`);
     }
@@ -102,7 +141,7 @@ function setupGrid(rows, lines, pattern) {
     var multiplier = 1.5;
     rows *= multiplier; lines *= multiplier;
 
-    this.grid = new Grid(rows, lines, pattern);
+    return new Grid(rows, lines, pattern);
 }
 
 /**
@@ -133,7 +172,7 @@ function populateGrid(grid, pattern) {
     pattern.forEach(function (coordinates) {
         var x = coordinates[0], y = coordinates[1];
         if (grid[x] === undefined || grid[x][y] === undefined) {
-            return;
+            return grid;
         };
         grid[x][y] = 1;
     });
@@ -251,3 +290,11 @@ function findNeighbours(x, y, grid) {
 //// Service functions ////
 function assert(condition, message) { if (!condition) { throw message; }; }
 function log(msg) { if (debug) { console.log(debug) }; }
+
+function fadeInButtons() {
+    var transitionTimeMS = 7000
+    $("#title").fadeIn(transitionTimeMS);
+    $("#patternSelector").fadeIn(transitionTimeMS);
+    $("#patternLbl").fadeIn(transitionTimeMS);
+    $("#startBtn").fadeIn(transitionTimeMS);
+}

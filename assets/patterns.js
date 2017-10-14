@@ -1,12 +1,29 @@
-//// GAME PATTERNS ////
-function allPatterns() {
-    return {
-        'clear': { name: "Clear", get: emptyPattern },
-        'random': { name: "Random", get: randomPattern },
-        'gameoflife': { name: "Game Of Life", get: gameOfLifeLettersPattern },
-        'gliderGun': { name: "Gosper Glider Gun", get: gosperGliderGunPattern }
-    };
+"use strict";
+
+function setupPatterns() {
+    // populate patternSelector with supported patterns
+    for (var key in allPatterns) {
+        $('#patternSelector').append($('<option>', {
+            value: key,
+            text: allPatterns[key].name,
+        }));
+    }
+
+    // set default pattern on selector
+    $("#patternSelector").val(defaults.pattern);
+
+    // update game's default pattern
+    game.setPattern(allPatterns[$("#patternSelector").val()]);
 }
+
+
+//// GAME PATTERNS ////
+var allPatterns = {
+    'clear': { name: "Clear", get: emptyPattern },
+    'random': { name: "Random", get: randomPattern },
+    'gameoflife': { name: "Game Of Life", get: gameOfLifeLettersPattern },
+    'gliderGun': { name: "Gosper Glider Gun", get: gosperGliderGunPattern }
+};
 
 /**
 * Clear grid pattern
@@ -55,7 +72,7 @@ const G = [[18, 12], [17, 12], [16, 12], [15, 12], [14, 12], [13, 12], [12, 12],
         var x = item[0], y = item[1];
         return [x, y + 22];
     }),
-    EE = E.map(function (item) { // same letter, different row
+    EE = E.map(function (item) { //  ,,   ,,
         var x = item[0], y = item[1];
         return [x, y + 44];
     });

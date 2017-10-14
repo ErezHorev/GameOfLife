@@ -5,6 +5,7 @@ h1 {
     font-size: 300%;
     font-style: italic;
     position: relative;
+    display: none;
 }
 
 body {
@@ -34,6 +35,7 @@ button {
     line-height:14px;
     box-shadow: 0 8px 16px 0 grey, 0 6px 20px 0 lightgray;
     border-radius: 10px;
+    display: none;
 }
 
 select {
@@ -42,12 +44,14 @@ select {
     font-size: 150%;
     left: 5%;
     box-shadow: 0 8px 16px 0 grey, 0 6px 20px 0 lightgray;
+    display: none;
 }
 
 label {
-    font-size: 150%;
+    font-size: 140%;
     position: relative;
-    left: 5%;
+    left: 4%;
+    display: none;
 }
 
 /* Start Button */
