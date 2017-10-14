@@ -35,11 +35,9 @@
         <script type="text/javascript" src="assets/app.js"></script>
         <script type="text/javascript">
             var game = new GameOfLife(defaults.rows, defaults.lines, 'clear');
-            setupPatterns()
-
-            $(window).ready(function () { 
-                game.playIntro();
-            });
+            $(window).ready(function () {
+                setupPatterns()
+            }
 
             // event handlers //
             $("#patternSelector").change(function () {
