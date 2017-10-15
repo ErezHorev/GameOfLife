@@ -35,7 +35,7 @@ function GameOfLife(rows, lines, pattern) {
         setPattern: setPattern,
     };
     newGame.init();
-    newGame.setPattern(allPatterns[pattern]);
+    newGame.setPattern(allPatterns[pattern || 'clear']);
     return newGame;
 }
 
@@ -95,12 +95,12 @@ function playIntro() {
     var pattern = allPatterns['gameoflife'].get();
     pattern.sort(() => Math.random() * 2 - 1); //randomizing pattern
 
-    var interval = 100,
+    var interval = 70,
         canvas = this.canvas,
         grid = this.grid,
         runId = 0;
 
-    var runStep = function () {
+        var runStep = function () {
         var slice = [],
             done = false;
 
@@ -152,7 +152,8 @@ function assert(condition, message) { if (!condition) { throw message; }; }
 function log(msg) { if (debug) { console.log(debug) }; }
 
 function fadeInButtons() {
-    var transitionTimeMS = 7000
+    var transitionTimeMS = 3000
+    $("#gameCanvas").fadeIn(transitionTimeMS);
     $("#title").fadeIn(transitionTimeMS);
     $("#patternSelector").fadeIn(transitionTimeMS);
     $("#patternLbl").fadeIn(transitionTimeMS);

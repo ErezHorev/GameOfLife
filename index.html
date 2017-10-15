@@ -34,10 +34,11 @@
         <script type="text/javascript" src="assets/grid.js"></script>
         <script type="text/javascript" src="assets/app.js"></script>
         <script type="text/javascript">
-            var game = new GameOfLife(defaults.rows, defaults.lines, 'clear');
+            var game = new GameOfLife(defaults.rows, defaults.lines);
             $(window).ready(function () {
-                setupPatterns()
-            }
+                game.playIntro();
+            });
+            setupPatterns()
 
             // event handlers //
             $("#patternSelector").change(function () {
@@ -80,18 +81,16 @@
                 $(this).bind("mousemove", canvasClick);
             });
 
-            var allPoints = [];
-            var trackPoints = function (e) {
-                var x = Math.floor(e.offsetX / cellSize)
-                var y = Math.floor(e.offsetY / cellSize)
-                allPoints.push([x, y]);
-                // console.log(allPoints);
-            };
             var canvasClick = function (e) {
-                // trackPoints(e)
                 if (!game.isRunning) { // don't draw during a running game
                     game.drawCell(e.offsetX, e.offsetY)
                 };
+            };
+            var trackPoints = function (e) {
+                // left for debugging draw on canvas
+                var x = Math.floor(e.offsetX / cellSize)
+                var y = Math.floor(e.offsetY / cellSize)
+                console.log(allPoints);
             };
         </script>
     </body>
