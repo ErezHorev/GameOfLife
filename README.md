@@ -2,7 +2,6 @@
 #### Implementing [Conway’s Game Of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) using JavaScript and html.
 
 ### Watch it live: https://erezhorev.github.io/GameOfLife    
-### [Documentation](doc/index.html)
 
 #### Approaching this project:   
 Started this project with a zero experience in web development and its territory.

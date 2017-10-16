@@ -158,4 +158,5 @@ function fadeInButtons() {
     $("#patternSelector").fadeIn(transitionTimeMS);
     $("#patternLbl").fadeIn(transitionTimeMS);
     $("#startBtn").fadeIn(transitionTimeMS);
+    $("#docLink").fadeIn(transitionTimeMS);
 }

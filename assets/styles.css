@@ -18,7 +18,7 @@ canvas {
     border: 3px solid silver;
     background-color: white;
     background-repeat: repeat;
-    top: 50px;
+    top: 25px;
     display: none;
 }
 
@@ -50,6 +50,30 @@ label {
     font-size: 140%;
     position: relative;
     left: 4%;
+    display: none;
+}
+
+a:link {
+    color: rgb(0, 15, 128); 
+    background-color: transparent; 
+    text-decoration: none;
+}
+
+a:visited {
+    color: rgb(70, 2, 129);
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: rgb(214, 2, 204);
+    background-color: transparent;
+    text-decoration: underline;
+}
+.docLink {
+    position: relative;
+    left: 13%;
+    top: 25px;
     display: none;
 }
 
