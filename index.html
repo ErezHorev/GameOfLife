@@ -34,7 +34,7 @@
         <script type="text/javascript" src="assets/grid.js"></script>
         <script type="text/javascript" src="assets/app.js"></script>
         <script type="text/javascript">
-            var game = new GameOfLife(defaults.rows, defaults.lines);
+            var game = GameOfLife(defaults.rows, defaults.lines);
             $(window).ready(function () {
                 game.playIntro();
             });

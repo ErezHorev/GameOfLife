@@ -46,7 +46,7 @@ function setupGrid(rows, lines, pattern) {
     var multiplier = 1.5;
     rows *= multiplier; lines *= multiplier;
 
-    return new Grid(rows, lines, pattern);
+    return Grid(rows, lines, pattern);
 }
 
 

@@ -95,18 +95,18 @@ function playIntro() {
     var pattern = allPatterns['gameoflife'].get();
     pattern.sort(() => Math.random() * 2 - 1); //randomizing pattern
 
-    var interval = 70,
+    var interval = 50,
         canvas = this.canvas,
         grid = this.grid,
         runId = 0;
 
-        var runStep = function () {
+    var runStep = function () {
         var slice = [],
             done = false;
 
         for (var i = 0; i < 20; i++) {
             let cell = pattern.pop();
-            if (cell == undefined) {
+            if (cell === undefined) {
                 clearInterval(runId);
                 break;
             };
@@ -152,8 +152,8 @@ function assert(condition, message) { if (!condition) { throw message; }; }
 function log(msg) { if (debug) { console.log(debug) }; }
 
 function fadeInButtons() {
-    var transitionTimeMS = 3000
-    $("#gameCanvas").fadeIn(transitionTimeMS);
+    var transitionTimeMS = 5000
+    $("#gameCanvas").fadeIn("slow");
     $("#title").fadeIn(transitionTimeMS);
     $("#patternSelector").fadeIn(transitionTimeMS);
     $("#patternLbl").fadeIn(transitionTimeMS);
